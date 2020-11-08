@@ -1,5 +1,5 @@
-//let user = 'bmw_connected_drive_user_email'
-//let pwd = 'bmw_connected_drive_password'
+let user = 'bmw_connected_drive_user_email'
+let pwd = 'bmw_connected_drive_password'
 
 token_expired = true
 token = ""
@@ -247,7 +247,7 @@ async function createWidget(){
   mpgTitle.textColor = new Color('#666', 1)
   mpgTitle.font = Font.mediumSystemFont(textStackTitleSize)
 
-  mpgValue = textStack.addText((Math.round(vehicleStatus.remainingFuel / vehicleStatus.remainingRangeFuel * 10000)/100)+' L / 100KM')
+  mpgValue = textStack.addText("ø "+(Math.round(vehicleStatus.remainingFuel / vehicleStatus.remainingRangeFuel * 10000)/100)+' L / 100KM')
   mpgValue.textColor = new Color('#000', 1)
   mpgValue.font = Font.boldSystemFont(textStackValueSize)
 
