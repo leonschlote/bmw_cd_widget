@@ -1,5 +1,5 @@
-let user = 'bmw_connected_drive_user_email'
-let pwd = 'bmw_connected_drive_password'
+//let user = 'bmw_connected_drive_user_email'
+//let pwd = 'bmw_connected_drive_password'
 
 token_expired = true
 token = ""
@@ -139,13 +139,25 @@ async function createWidget(){
   if (vehicleStatus.doorPassengerFront!="CLOSED"){
     lockString += "Beifahrertür geöffnet, "
   }
+  
+  if (vehicleStatus.doorDriverRear != undefined && vehicleStatus.doorDriverRear!="CLOSED"){
+    lockString += "Tür hinten links geöffnet, "
+  }
+  
+  if (vehicleStatus.doorPassengerRear != undefined && vehicleStatus.doorPassengerRear!="CLOSED"){
+    lockString += "Tür hinten rechts geöffnet, "
+  }
   if(vehicleStatus.trunk == "CLOSED" &&
      vehicleStatus.hood == "CLOSED" &&
      vehicleStatus.doorDriverFront == "CLOSED" &&
-     vehicleStatus.doorPassengerFront == "CLOSED"
+     vehicleStatus.doorPassengerFront == "CLOSED" &&
+     (vehicleStatus.doorDriverRear == undefined || vehicleStatus.doorDriverRear=="CLOSED") &&
+     (vehicleStatus.doorPassengerRear == undefined || vehicleStatus.doorPassengerRear=="CLOSED")
    ){
      if(vehicleStatus.windowDriverFront == "CLOSED" &&
-        vehicleStatus.windowPassengerFront == "CLOSED"
+        vehicleStatus.windowPassengerFront == "CLOSED" &&
+        (vehicleStatus.windowDriverRear == undefined || vehicleStatus.windowDriverRear=="CLOSED") &&
+        (vehicleStatus.windowPassengerRear == undefined || vehicleStatus.windowPassengerRear=="CLOSED")
       ){
        lockString += "Alle Türen und Fenster geschlossen, "
      }else{
@@ -159,8 +171,24 @@ async function createWidget(){
    if (vehicleStatus.windowPassengerFront!="CLOSED"){
      lockString += "Fenster Beifahrerseite vorne geöffnet, "
    }
+   if (vehicleStatus.windowDriverRear != undefined && vehicleStatus.windowDriverRear!="CLOSED"){
+     lockString += "Fenster hinten links geöffnet, "
+   }
+   
+   if (vehicleStatus.windowPassengerRear != undefined && vehicleStatus.windowPassengerRear!="CLOSED"){
+     lockString += "Fenster hinten rechts geöffnet, "
+   }
 
    lockString = lockString.slice(0,-2)
+
+   let fuelString = ""
+
+   if(vehicleStatus.fuelPercent != undefined){
+     fuelString = vehicleStatus.fuelPercent+' % / '+vehicleStatus.remainingRangeFuel+' KM'
+   }else{
+     fuelString = vehicleStatus.remainingFuel+' L / '+vehicleStatus.remainingRangeFuel+' KM'
+   }
+
 
 
 
@@ -179,32 +207,49 @@ async function createWidget(){
   leftStack = horizontalStack.addStack()
   leftStack.layoutVertically()
   leftStack.topAlignContent()
-
+  
   let vehicleImg = await getVehicleImage(vin,500,300,320)
-  car_img = leftStack.addImage(vehicleImg)
+  //let vehicleImg = await getVehicleImage(vin,500,200,320)
+  car_stack = leftStack.addStack()
+  car_stack.size = new Size(170,70)
+  car_stack.backgroundImage = vehicleImg
+  //car_img = leftStack.addImage(vehicleImg)
 
   textStack = leftStack.addStack()
   textStack.layoutVertically()
   textStack.topAlignContent()
-  textStack.setPadding(0,12,0,0)
+  textStack.setPadding(2,12,0,0)
+  
+  textStackTitleSize = 8
+  textStackValueSize = 10
 
   tankTitle = textStack.addText('Tankfüllstand')
   tankTitle.textColor = new Color('#666', 1)
-  tankTitle.font = Font.mediumSystemFont(11)
+  tankTitle.font = Font.mediumSystemFont(textStackTitleSize)
 
-  tankValue = textStack.addText(vehicleStatus.remainingFuel+' L / '+vehicleStatus.remainingRangeFuel+' KM')
+  tankValue = textStack.addText(fuelString)
   tankValue.textColor = new Color('#000', 1)
-  tankValue.font = Font.boldSystemFont(11)
+  tankValue.font = Font.boldSystemFont(textStackValueSize)
 
   textStack.addSpacer(4)
 
   mileageTitle = textStack.addText('Kilometerstand')
   mileageTitle.textColor = new Color('#666', 1)
-  mileageTitle.font = Font.mediumSystemFont(11)
+  mileageTitle.font = Font.mediumSystemFont(textStackTitleSize)
 
   mileageValue = textStack.addText(vehicleStatus.mileage+' KM')
   mileageValue.textColor = new Color('#000', 1)
-  mileageValue.font = Font.boldSystemFont(11)
+  mileageValue.font = Font.boldSystemFont(textStackValueSize)
+
+  textStack.addSpacer(4)
+
+  mpgTitle = textStack.addText('Verbrauch')
+  mpgTitle.textColor = new Color('#666', 1)
+  mpgTitle.font = Font.mediumSystemFont(textStackTitleSize)
+
+  mpgValue = textStack.addText((Math.round(vehicleStatus.remainingFuel / vehicleStatus.remainingRangeFuel * 10000)/100)+' L / 100KM')
+  mpgValue.textColor = new Color('#000', 1)
+  mpgValue.font = Font.boldSystemFont(textStackValueSize)
 
   textStack.addSpacer()
 
