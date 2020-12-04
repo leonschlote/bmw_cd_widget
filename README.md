@@ -2,7 +2,7 @@
 To use the widget copy the javascript code into a new Scriptable script and add your Connected-Drive User-Email and Password in the Script.
 
 ```javascript
-//let user = 'bmw_connected_drive_user_enmail'
+//let user = 'bmw_connected_drive_user_email'
 //let pwd = 'bmw_connected_drive_password'
 ```
 
