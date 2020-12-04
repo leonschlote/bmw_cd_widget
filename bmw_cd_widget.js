@@ -32,8 +32,8 @@ async function getToken(){
         "Content-Type": "application/x-www-form-urlencoded",
         "Host": "customer.bmwgroup.com",
         "Accept-Encoding": "gzip",
-        "Authorization": "Basic blF2NkNxdHhKdVhXUDc0eGYzQ0p3VUVQOjF6REh4NnVuNGNEanliTEVOTjNreWZ1bVgya0VZaWdXUGNRcGR2RFJwSUJrN3JPSg==",
-        "User-Agent": "okhttp/2.60"
+        "Authorization": "Basic ZDc2NmI1MzctYTY1NC00Y2JkLWEzZGMtMGNhNTY3MmQ3ZjhkOjE1ZjY5N2Y2LWE1ZDUtNGNhZC05OWQ5LTNhMTViYzdmMzk3Mw==",
+        "User-Agent": "okhttp/3.12.2"
       }
 
       body = "scope=authenticate_user remote_services vehicle_data&grant_type=password&password="+pwd+"&username="+user
